@@ -1,1 +1,1 @@
-# inshurt-cypress-test
+# inshur-applicant-test
