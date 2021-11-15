@@ -4,5 +4,6 @@ Feature: Sample feature file for the test
     
     Scenario: Inshur Website
         Given the user visits Inshur Test Website
-        When the click the last user 
+        When they click the last user 
         Then assert
+

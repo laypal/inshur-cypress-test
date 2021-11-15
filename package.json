@@ -15,9 +15,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "server": "node server.js",
+    "server": "node apiServer.js",
     "test": "node_modules/.bin/cypress run --browser chrome",
-    "all": "concurrently --kill-others \"yarn start\" \"yarn server\" \"yarn test\""
+    "all": "node_modules/.bin/concurrently --kill-others \"yarn start\" \"yarn server\" \"yarn test\"",
+    "call:api": "curl --location --request GET 'http://localhost:3001/customerList'"
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true
