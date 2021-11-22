@@ -11,3 +11,4 @@ When("they click the last user",()=>{
 
 Then("assert",()=>{
     cy.contains("Buys Lots of Products in general");
+})
