@@ -1,0 +1,14 @@
+{
+    "client_1": {
+      "id": "1",
+      "name": "John Smith"
+    },
+    "client_2": {
+      "id": "2",
+      "name": "Jeff Bridges"
+    },
+    "client_3": {
+      "id": "3",
+      "name": "Steve Jones"
+    }
+  }

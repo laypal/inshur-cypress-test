@@ -1,0 +1,31 @@
+{
+  "name": "simple-reactjs-test",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "concurrently": "^6.3.0",
+    "json-server": "^0.17.0",
+    "path": "^0.12.7",
+    "react": "^16.4.1",
+    "react-bootstrap": "^0.32.1",
+    "react-dom": "^16.4.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "server": "node apiServer.js",
+    "test": "node_modules/.bin/cypress run --browser chrome",
+    "all": "node_modules/.bin/concurrently --kill-others \"yarn start\" \"yarn server\" \"yarn test\"",
+    "call:api": "curl --location --request GET 'http://localhost:3001/customerList'"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
+  },
+  "devDependencies": {
+    "cypress": "^7.5.0",
+    "cypress-cucumber-preprocessor": "^4.1.2",
+    "gh-pages": "^1.2.0"
+  }
+}
