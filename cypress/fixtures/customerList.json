@@ -1,0 +1,23 @@
+
+{
+    "inshurLogo": ".App-logo",
+    "customer_List_header":".App-title",
+    "view_Details_button": "view-details_button",
+    "selected_customer": "data-test=\"selected_customer\"",
+    "panel_customers": "data-test=\"panel_customers\"",
+    "panel_customerName": "panel_customer_name",
+    "panel_customer_contact_info": "panel_customer_contact_info",
+    "panel_contact_email": "data-test=\"panel_contact_email\"",
+    "panel_contact_phone": "data-test=\"panel_contact_phone\"",
+    "customer_details": "data-test=\"customer_details\"",
+    "customer_name_header": "data-test=\"customer_name_header\"",
+    "customer_details_name": "data-test=\"customer_details_name\"",
+    "customer_details_email": "data-test=\"customer_details_email\"",
+    "customer_details_phone": "data-test=\"customer_details_phone\"",
+    "customer_details_city": "data-test=\"customer_details_city\"",
+    "customer_details_state": "data-test=\"customer_details_state\"",
+    "customer_details_country": "data-test=\"customer_details_country\"",
+    "customer_details_organization": "data-test=\"customer_details_organization\"",
+    "customer_details_job-profile": "data-test=\"customer_details_job-profile\"",
+    "customer_details_additional_info": "data-test=\"customer_details_additional-info\""
+}

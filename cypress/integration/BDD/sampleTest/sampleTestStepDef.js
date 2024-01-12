@@ -6,7 +6,7 @@ Given("the user visits Inshur Test Website", function(){
 })
 
 When("they click the last user",()=>{
-    cy.get("[data-test='3']").click();
+    cy.get("[data-test='view-details_button3']").click();
 })
 
 Then("assert",()=>{
