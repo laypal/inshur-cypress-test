@@ -4,11 +4,11 @@ let fixtures;
 let clients;
 
 before(() => {
-    Promise.all([
-        cy.fixture('clients.json'),
-        cy.fixture('customerList.json')
-    ]).then(([clientsData,customerList]) => {
+    cy.fixture('clients.json').then((clientsData) => {
         clients = clientsData;
+    });
+
+    cy.fixture('customerList.json').then((customerList) => {
         fixtures = customerList;
     });
 });
@@ -38,26 +38,34 @@ Then("the user can see the first customers phone number",function(){
     viewCustomersPhone(clients.client_1);
 });    
 
-//Below are a list of functions containing logic for the steps of the scenarios above
+//Below are a list of functions containing logic for the steps of the scenarios above:
 
+// This function will navigate the user to the landing page and assert it by confirming that the logo and header elements are visible.
+// The URL for the landing page has been added to the cypress.json config as baseURL. This is to allow for flexibility and clean code practice as will make it easier to update in one place.
 function visitMainPage(){
-    cy.visit("http://localhost:3000").contains("Cypress Test"),
+    cy.visit('/').contains("Cypress Test"),
     cy.get(fixtures.inshurLogo).should("be.visible");
     cy.get(fixtures.customer_List_header).should("be.visible");
 }
 
+// This function will assert that the panel with the customers details is visible.
 function viewCustomersPanel(){
     cy.get(fixtures.panel_customers).should("be.visible");
 }
 
+// This function will view and assert a clients' contact details (email and phone) on the panel based on test data added to clients.json fixture file.
 function viewCustomersContactDetails(client){
-    cy.get(`[data-test="${fixtures.panel_customer_contact_info}${client.id}"]`).should("be.visible");
+    cy.get(fixtures.panel_customers)
+    .should('contain', client.contact_details.email)
+    .and('contain', client.contact_details.phone);
 }
 
-function viewCustomersEmail(clients){
-    cy.get(fixtures.panel_contact_email).contains(clients.client);
+// This function will assert the clients' contact email on the panel is correctly displayed based on test data added to clients.json fixture file.
+function viewCustomersEmail(client){
+    cy.get(fixtures.panel_contact_email).contains(client.contact_details.email);
 }
 
-function viewCustomersPhone(clients){
-    cy.get(fixtures.panel_contact_phone).contains(clients.client);
+// This function will assert the clients' contact phone number on the panel is correctly displayed based on test data added to clients.json fixture file.
+function viewCustomersPhone(client){
+    cy.get(fixtures.panel_contact_phone).contains(client.contact_details.phone);
 }

@@ -4,11 +4,11 @@ let fixtures;
 let clients;
 
 before(() => {
-    Promise.all([
-        cy.fixture('clients.json'),
-        cy.fixture('customerList.json')
-    ]).then(([clientsData,customerList]) => {
+    cy.fixture('clients.json').then((clientsData) => {
         clients = clientsData;
+    });
+
+    cy.fixture('customerList.json').then((customerList) => {
         fixtures = customerList;
     });
 });
@@ -27,21 +27,34 @@ Then("the user is navigated to the customer details page of the user", function(
 });
 
 
-//Below are a list of functions containing logic for the steps of the scenarios above
+//Below are a list of functions containing logic for the steps of the scenarios above:
 
+// This function will navigate the user to the landing page and assert it by confirming that the logo and header elements are visible.
+// The URL for the landing page has been added to the cypress.json config as baseURL. This is to allow for flexibility and clean code practice as will make it easier to update in one place.
 function visitMainPage(){
-    cy.visit("http://localhost:3000").contains("Cypress Test"),
+    cy.visit('/').contains("Cypress Test"),
     cy.get(fixtures.inshurLogo).should("be.visible");
     cy.get(fixtures.customer_List_header).should("be.visible");
 }
 
-function viewCustomerDetailsPage(clients){
-    cy.get(fixtures.customerList,selected_customer).should("be.visible");
-    cy.get(fixtures.customer_name_header).contains(clients.client);
+
+//This function will view the selected customer and assert that the correct name and their customer details page is displayed.
+function viewCustomerDetailsPage(client){
+    cy.get(fixtures.selected_customer).should("be.visible");
+    cy.get(fixtures.customer_name_header).contains(client.name);
     cy.get(fixtures.customer_details).should("be.visible");
 }
 
+// This function selects a customer from the panel, based on the client.id provided, and will select the view details button so that the user gets forwarded to the correct details page.
+// clientId had to be converted to a number so that cypress can construct the selector for the panel and button correctly.
 function selectCustomersDetails(client){
-    cy.get(`[data-test="${fixtures.panel_customerName}${client.id}"]`).should("be.visible");
-    cy.get(`[data-test="${fixtures.viewClients_button}${client.id}"]`).click();
+    const clientId = Number(client.id);
+
+    // Debug statements to log information
+    console.log('Client ID:', clientId);
+    console.log('panel_customerName Selector:', `[data-test^="${fixtures.panel_customerName}${clientId}"]`);
+    console.log('view_details_button Selector:', `[data-test^="${fixtures.view_details_button}${clientId}"]`);
+
+    cy.get(`[data-test^="${fixtures.panel_customerName}${clientId}"]`).should("be.visible");
+    cy.get(`[data-test^="${fixtures.view_details_button}${clientId}"]`).should("be.visible").click();
 }
