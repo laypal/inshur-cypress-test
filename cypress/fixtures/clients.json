@@ -1,14 +1,26 @@
 {
     "client_1": {
       "id": "1",
-      "name": "John Smith"
+      "name": "John Smith",
+      "contact_details": {
+      "email": "jsmith@test.com",
+      "phone": "0208092029"
+      }
     },
     "client_2": {
       "id": "2",
-      "name": "Jeff Bridges"
+      "name": "Jeff Bridges",
+      "contact_details": {
+      "email": "abcd@test.com",
+      "phone": "0161 225 7632"
+      }
     },
     "client_3": {
       "id": "3",
-      "name": "Steve Jones"
+      "name": "Steve Jones",
+      "contact_details": {
+      "email":"steven.jones@test.com",
+      "phone": "01403 215100"
+      }
     }
   }

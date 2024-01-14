@@ -47,8 +47,8 @@ export default class CustomerDetails extends Component {
           <p data-test="customer_details_state">State : {this.state.customerDetails.data.state}</p>
           <p data-test="customer_details_country">Country : {this.state.customerDetails.data.country}</p>
           <p data-test="customer_details_organization">Organization : {this.state.customerDetails.data.organization}</p>
-          <p data-test="customer_details_job-profile">Job Profile : {this.state.customerDetails.data.jobProfile}</p>
-          <p data-test="customer_details_additional-info">Additional Info : {this.state.customerDetails.data.additionalInfo}</p>
+          <p data-test="customer_details_job_profile">Job Profile : {this.state.customerDetails.data.jobProfile}</p>
+          <p data-test="customer_details_additional_info">Additional Info : {this.state.customerDetails.data.additionalInfo}</p>
         </Panel.Body>
       </Panel>
     </div>)

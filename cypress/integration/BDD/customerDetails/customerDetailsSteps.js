@@ -3,12 +3,14 @@ import { Given,When,Then } from "cypress-cucumber-preprocessor/steps";
 let fixtures;
 let clients;
 
+//issue was that i was using a promise.all block inside the before hook. After further investigation i found out that most cy. commands in cypress are already promise-like and therefroe dont need promise block.
+
 before(() => {
-    Promise.all([
-        cy.fixture('clients.json'),
-        cy.fixture('customerList.json')
-    ]).then(([clientsData,customerList]) => {
+    cy.fixture('clients.json').then((clientsData) => {
         clients = clientsData;
+    });
+
+    cy.fixture('customerList.json').then((customerList) => {
         fixtures = customerList;
     });
 });
@@ -61,51 +63,71 @@ Then("the user can see the contact info on the panel correctly matches the custo
 
 Then("the user is unable to see a clients purchase history on the customer details page",function(){
     viewCustomerDetailsPage(clients.client_1);
-    unhappyViewPurchaseHistory();
+    verifyNoPurchaseHistory();
 });
 
 
-//Below are a list of functions containing logic for the steps of the scenarios above
+//Below are a list of functions containing logic for the steps of the scenarios above:
 
+// This function will navigate the user to the landing page and assert it by confirming that the logo and header elements are visible.
+// The URL for the landing page has been added to the cypress.json config as baseURL. This is to allow for flexibility and clean code practice as will make it easier to update in one place.
 function visitMainPage(){
-    cy.visit("http://localhost:3000").contains("Cypress Test"),
+    cy.visit('/').contains("Cypress Test"),
     cy.get(fixtures.inshurLogo).should("be.visible");
     cy.get(fixtures.customer_List_header).should("be.visible");
 }
 
-function viewCustomersContactDetails(clients){
-    cy.get(fixtures.panel_customer_contact_info).contains(clients.client);
+// This function will view and assert a clients' contact details (email and phone) on the panel based on test data added to clients.json fixture file.
+function viewCustomersContactDetails(client){
+    cy.get(fixtures.panel_customers)
+    .should('contain', client.contact_details.email)
+    .and('contain', client.contact_details.phone);
 }
 
-function comparePanelContactsWithDetails(clients){
-    cy.get(fixtures.panel_customer_contact_info).contains(clients.client)
-    .then(($contact_info) => {
-        const contact_info = $contact_info.text();
-        cy.get(fixtures.customer_details).matches(contact_info);
+// This function will compare the clients' contact details (email and phone) on the panel with the contact details in the clients' customer details page to ensure these are matching.
+function comparePanelContactsWithDetails(client){
+    cy.get(fixtures.panel_customer_contact_info)
+    .should('contain', client.contact_details.email)
+    .and('contain', client.contact_details.phone)
+    .then(() => {
+        cy.get(fixtures.customer_details_email)
+        .should('contain', client.contact_details.email);
+        cy.get(fixtures.customer_details_phone)
+        .should('contain', client.contact_details.phone);
     })
 }
 
-function viewCustomerDetailsPage(clients){
-    cy.get(fixtures.customerList,selected_customer).should("be.visible");
-    cy.get(fixtures.customer_name_header).contains(clients.client);
+//This function will view the selected customer and assert that the correct name and their customer details page is displayed.
+function viewCustomerDetailsPage(client){
+    cy.get(fixtures.selected_customer).should("be.visible");
+    cy.get(fixtures.customer_name_header).contains(client.name);
     cy.get(fixtures.customer_details).should("be.visible");
 }
 
+// This function selects a customer from the panel, based on the client.id provided, and will select the view details button so that the user gets forwarded to the correct details page.
+// clientId had to be converted to a number so that cypress can construct the selector for the panel and button correctly.
 function selectCustomersDetails(client){
-    cy.get(`[data-test="${fixtures.panel_customerName}${client.id}"]`).should("be.visible");
-    cy.get(`[data-test="${fixtures.viewClients_button}${client.id}"]`).click();
+    const clientId = Number(client.id);
+
+    // Debug statements to log information
+    // console.log('Client ID:', clientId);
+    // console.log('panel_customerName Selector:', `[data-test^="${fixtures.panel_customerName}${clientId}"]`);
+    // console.log('view_details_button Selector:', `[data-test^="${fixtures.view_details_button}${clientId}"]`);
+
+    cy.get(`[data-test^="${fixtures.panel_customerName}${clientId}"]`).should("be.visible");
+    cy.get(`[data-test^="${fixtures.view_details_button}${clientId}"]`).should("be.visible").click();
 }
 
-function viewCustomerAdditionalInfo(text, value){
+//The below functions containing 'view' are all assert functions to allow the user to assert correct elements in customer details section are visible. 
+// Additional info and Customer city have text properties added to function to allow for more specific assertions in the scenarios.
+function viewCustomerAdditionalInfo(text){
     cy.get(fixtures.customer_details_additional_info)
-        .should('contain', text)
-        .and('contain', value);
+        .should('contain', text);
 }
 
 function viewCustomerCity(text){
     cy.get(fixtures.customer_details_city)
-    .should('contain', text)
-    .and ('contain', value);
+    .should('contain', text);
 }
 
 function viewCustomerOrganization(){
@@ -113,9 +135,10 @@ function viewCustomerOrganization(){
 }
 
 function viewCustomerJobProfile(){
-    cy.get(fixtures.customer_details_job-profile).should("be.visible");
+    cy.get(fixtures.customer_details_job_profile).should("be.visible");
 }
 
-function unhappyViewPurchaseHistory(){
-    cy.get(fixtures.customer_details_purchase-history).should('not.exist');
+// This function is an assertion to help confirm unhappy path test that purchase history fixture does not exist in customer details page.
+function verifyNoPurchaseHistory(){
+    cy.get(fixtures.customer_details_purchase_history).should('not.exist');
 }
