@@ -3,8 +3,6 @@ import { Given,When,Then } from "cypress-cucumber-preprocessor/steps";
 let fixtures;
 let clients;
 
-//issue was that i was using a promise.all block inside the before hook. After further investigation i found out that most cy. commands in cypress are already promise-like and therefroe dont need promise block.
-
 before(() => {
     cy.fixture('clients.json').then((clientsData) => {
         clients = clientsData;
@@ -108,12 +106,6 @@ function viewCustomerDetailsPage(client){
 // clientId had to be converted to a number so that cypress can construct the selector for the panel and button correctly.
 function selectCustomersDetails(client){
     const clientId = Number(client.id);
-
-    // Debug statements to log information
-    // console.log('Client ID:', clientId);
-    // console.log('panel_customerName Selector:', `[data-test^="${fixtures.panel_customerName}${clientId}"]`);
-    // console.log('view_details_button Selector:', `[data-test^="${fixtures.view_details_button}${clientId}"]`);
-
     cy.get(`[data-test^="${fixtures.panel_customerName}${clientId}"]`).should("be.visible");
     cy.get(`[data-test^="${fixtures.view_details_button}${clientId}"]`).should("be.visible").click();
 }
